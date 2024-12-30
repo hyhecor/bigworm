@@ -1,0 +1,18 @@
+PACKAGE?=pkg/rpc/broker/v1
+
+install:
+	# about protoc releases (https://github.com/protocolbuffers/protobuf/releases)
+	curl -sL https://github.com/protocolbuffers/protobuf/releases/download/v29.2/protoc-29.2-linux-x86_64.zip \
+		| busybox unzip -d $$(go env GOPATH) - \
+		&& chmod +x $$(go env GOPATH)/bin/protoc
+
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.1
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+
+genertate: clean
+	protoc --go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		${PACKAGE}/*.proto
+
+clean:
+	rm -f ${PACKAGE}/*.pb.go

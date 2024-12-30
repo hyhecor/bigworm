@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package com.inpro.bigworm.broker.v1;
+
+option go_package = "bigworm/pkg/rpc/broker/v1;broker";
+
+import "google/protobuf/any.proto";
+
+service BrokerService {
+    rpc ClientList (ClientListRequest) returns (ClientListResponse) {}
+}
+
+message ClientListRequest {
+}
+
+
+
+message ClientListResponse {
+    repeated Client clients = 1;
+}
+
+message Client {
+    string client_id = 1;
+    
+    map<string, google.protobuf.Any> property = 2;
+}
+
+
